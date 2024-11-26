@@ -1,20 +1,26 @@
+"use client"
+import { resgisterUser } from "@/lib/actions/authAction"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Button, Checkbox, Input } from "@nextui-org/react"
+import { passwordStrength } from "check-password-strength"
+import React, { useEffect } from "react"
+import { SubmitHandler, useForm } from "react-hook-form"
 import validator from "validator"
 import { z } from "zod"
 
 
 const formSchema = z.object({
-    firstname: z.
+    firstName: z.
     string()
     .min(2,"fisrt name should be min 2 character")
     .max(42,"fisrt name should be max 42 character")
-    .regex(new RegExp("^[a-zA-Z]+$","no specail charater are allowed!")),
+    .regex(new RegExp("^[a-zA-Z]+$"),"no specail charater are allowed!"),
 
-    lastname: z.
+    lastName: z.
     string()
     .min(2,"last name should be min 2 character")
     .max(42,"last name should be max 42 character")
-    .regex(new RegExp("^[a-zA-Z]+$","no specail charater are allowed!")),
+    .regex(new RegExp("^[a-zA-Z]+$"),"no specail charater are allowed!"),
 
     email:z.string().email("please enter a valid email"),
 
@@ -36,20 +42,46 @@ const formSchema = z.object({
     })
 }).refine(data => data.password === data.confrimPassword ,{
     message: "passord and confrim password not match",
-    path:["password","confrimPassword"]
+    path:["confrimPassword"]
 }
 )
 
+
+type inputType = z.infer<typeof formSchema>;
 const Signup = () => {
+  
+   
+    const {register,handleSubmit,reset,formState:{errors},watch} = useForm<inputType>(
+        {resolver: zodResolver(formSchema),}
+    );
+
+    const [passStrength,setPassStrength] = React.useState(0)
+
+    useEffect(() => {
+        setPassStrength(passwordStrength(watch().password).id)
+    },[watch().password])
+
+    const saveData: SubmitHandler<inputType> = async (data) => {
+        const {accepted,confrimPassword,...user} = data;
+        try {
+            const  result = await resgisterUser(user);
+            
+        }catch(err) {
+
+        }
+    }
+
   return (
-    <form className="w-96 m-auto space-y-3 ">
-        <Input type="text" label="first name" />
-        <Input type="text" label="last name" />
-        <Input type="email" label="email" />
-        <Input type="text" label="phone number" />
-        <Input type="password" label="password" />
-        <Input type="password" label="confrim password" />
-        <Checkbox> accpet the terms and conditions</Checkbox>
+    <form className="w-96 m-auto space-y-3 " onSubmit={handleSubmit(saveData)}>
+        <Input errorMessage={errors?.firstName?.message} isInvalid={!!errors.firstName} {...register("firstName")} type="text" label="first name" />
+        <Input errorMessage={errors?.lastName?.message} isInvalid={!!errors.lastName} {...register("lastName")} type="text" label="last name" />
+        <Input errorMessage={errors?.email?.message} isInvalid={!!errors.email} {...register("email")} type="email" label="email" />
+        <Input  errorMessage={errors?.phone?.message} isInvalid={!!errors.phone} {...register("phone")} type="text" label="phone number" />
+        <Input errorMessage={errors?.password?.message} isInvalid={!!errors.password} {...register("password")} type="password" label="password" />
+        {passStrength == 3 ? "strong password" : passStrength == 1 ? "weak password" :  passStrength == 2 ? "medium password" : "" }
+        <Input errorMessage={errors?.confrimPassword?.message} isInvalid={!!errors.confrimPassword} {...register("confrimPassword")} type="password" label="confrim password" />
+        <Checkbox {...register("accepted")}  > accpet the terms and conditions</Checkbox>
+        <p className="text-tiny text-danger">{errors?.accepted?.message}</p>
         <Button type="submit" className=" w-40  m-auto mb-10" > Submit</Button> 
         
         
