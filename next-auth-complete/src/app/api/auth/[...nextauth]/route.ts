@@ -3,6 +3,8 @@ import NextAuth from "next-auth"
 import { AuthOptions } from "next-auth";
 import CredentialsProvider  from "next-auth/providers/credentials"
 import  bcript from "bcrypt";
+import { User } from "@prisma/client";
+import { section } from "framer-motion/client";
 
 export const authOptions: AuthOptions = {
 
@@ -37,6 +39,16 @@ export const authOptions: AuthOptions = {
             },  
     })
   ],
+  callbacks:{
+    async jwt({token,user}){
+        if(user) token.user = user as User;
+        return token
+    },
+    async session({token,session}){
+        session.user = token.user;
+        return session;
+    }
+  }
 }
 const handler =  NextAuth(authOptions);
 

@@ -5,6 +5,7 @@ import { Button, Checkbox, Input } from "@nextui-org/react"
 import { passwordStrength } from "check-password-strength"
 import React, { useEffect } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
+import { toast } from "react-toastify"
 import validator from "validator"
 import { z } from "zod"
 
@@ -65,9 +66,10 @@ const Signup = () => {
         const {accepted,confrimPassword,...user} = data;
         try {
             const  result = await resgisterUser(user);
-            
+            toast.success("sucessfully added");
         }catch(err) {
-
+            toast.error("some thing is wrong");
+            console.error(err);
         }
     }
 
