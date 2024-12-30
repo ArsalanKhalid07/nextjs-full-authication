@@ -4,10 +4,12 @@ import { AuthOptions } from "next-auth";
 import CredentialsProvider  from "next-auth/providers/credentials"
 import  bcript from "bcrypt";
 import { User } from "@prisma/client";
-import { section } from "framer-motion/client";
+
 
 export const authOptions: AuthOptions = {
-
+    pages:{
+        signIn:"/auth/signIn"
+    },
   providers: [
     CredentialsProvider({
         name: "Credentials",
