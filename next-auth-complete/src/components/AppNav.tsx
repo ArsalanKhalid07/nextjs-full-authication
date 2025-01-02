@@ -1,6 +1,7 @@
 import React from 'react'
-import {Button, Link, Navbar, NavbarContent, NavbarItem} from "@nextui-org/react";
+import { Navbar, NavbarContent, NavbarItem} from "@nextui-org/react";
 import SigninButton from './SigninButton';
+import Link from 'next/link';
 
 const AppNav = () => {
   return (

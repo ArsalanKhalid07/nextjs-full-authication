@@ -1,11 +1,17 @@
 import SignInForm from "@/components/SignInForm"
 import Link from "next/link"
 
+interface props {
+  searchParams: {
+    callbackUrl?: string
+  }
+}
 
-const page = () => {
+const page = ({searchParams}:props) => {
+  console.log("searchsearch",searchParams)
   return (
     <div>
-            <SignInForm />
+            <SignInForm callBackUrl={searchParams.callbackUrl}/>
           <Link href="/auth/forget">if you forget password</Link>
     </div>
   )

@@ -42,7 +42,7 @@ const onSubmit : SubmitHandler<inputform> = async (data) => {
       toast.error(result?.error);
       return;
     } 
-
+    toast.success("welcome to website ");
     router.push(props.callBackUrl ? props.callBackUrl : "/");
 }
 
