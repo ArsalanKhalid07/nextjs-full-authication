@@ -1,4 +1,3 @@
-import { log } from "console";
 import Handlebars from "handlebars";
 import nodemailer from "nodemailer";
 import { activateEmail } from "./emailTemplate/activate";

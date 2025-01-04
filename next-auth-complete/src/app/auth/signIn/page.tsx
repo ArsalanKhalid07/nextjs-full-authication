@@ -12,7 +12,7 @@ const page = ({searchParams}:props) => {
   return (
     <div>
             <SignInForm callBackUrl={searchParams.callbackUrl}/>
-          <Link href="/auth/forget">if you forget password</Link>
+          <Link href="/auth/forgetPassword">if you forget password</Link>
     </div>
   )
 }

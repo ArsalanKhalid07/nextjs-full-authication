@@ -36,6 +36,7 @@ export const authOptions: AuthOptions = {
             if(!credentials?.password) throw new Error("please provide your password");
             const isPasswordCorrect =  await bcript.compare(credentials.password,user.password);
             if(!isPasswordCorrect) throw new Error("user name or password is not correct")
+                if(!user.emailVerified) throw new Error("Please vertify your email first")
             const {password,...userWithoutPass} = user;
             return userWithoutPass;
             },  
