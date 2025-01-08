@@ -62,7 +62,7 @@ export const forgetPassword = async (email: string) => {
             id:user.id
         })
       
-     const resetPassUrl = `${process.env.NEXTAUTH_URL}/auth/resetPass/${jwtUserId}`   
+     const resetPassUrl = `${process.env.NEXTAUTH_URL}/auth/resetPassword/${jwtUserId}`   
 
      const body = compileResetTemplate(user.firstName,resetPassUrl);
      const sendResult = await sendMail({to:user.email,subject:"reset your password",body:body});

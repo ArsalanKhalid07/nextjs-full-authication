@@ -20,9 +20,7 @@ const page = () => {
     const forgetSubmmited: SubmitHandler<inputType> = async (data) => {
            try {
                 const result = await forgetPassword(data.email);
-                if(result) {
-                    toast.success("reset password email send");
-                }
+                toast.success("reset password email send");
                 console.log(result)
                 reset();
            }catch(e) {
