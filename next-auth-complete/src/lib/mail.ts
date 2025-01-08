@@ -1,6 +1,7 @@
 import Handlebars from "handlebars";
 import nodemailer from "nodemailer";
 import { activateEmail } from "./emailTemplate/activate";
+import { resetPassTemplate } from "./emailTemplate/resetPass";
 
 export const sendMail = async ({to,subject,body}:{to:string,subject:string,body:string}) => {
     const {SMPT_EMAIL,SMPT_EMAIL_PASS} = process.env;
@@ -33,6 +34,15 @@ export const sendMail = async ({to,subject,body}:{to:string,subject:string,body:
 
 export const compileActivationTemplate = (name:string,url:string) => {
     const template = Handlebars.compile(activateEmail);
+    const htmlBody = template({
+        name,
+        url,
+    });
+    return htmlBody;
+}
+
+export const compileResetTemplate = (name:string,url:string) => {
+    const template = Handlebars.compile(resetPassTemplate);
     const htmlBody = template({
         name,
         url,
