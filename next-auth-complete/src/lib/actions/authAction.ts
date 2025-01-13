@@ -6,6 +6,7 @@ import * as bcript from "bcrypt";
 import { compileResetTemplate, compileActivationTemplate, sendMail } from "../mail";
 import { signJwt, verifyJwt } from "../jwt";
 import { data } from "framer-motion/client";
+import { promise } from "zod";
 
 export async function resgisterUser(user: Omit<User,"id"|"emailVerified"|"image">) {
     const result = await prisma.user.create({
@@ -68,3 +69,32 @@ export const forgetPassword = async (email: string) => {
      const sendResult = await sendMail({to:user.email,subject:"reset your password",body:body});
      return sendResult;
 } 
+
+
+type ResetPasswordType = (
+    jwtUserId: string,
+    password: string
+) => Promise<"userNotFound" | "success">
+
+
+export const ResetpasswordAction: ResetPasswordType = async (jwtUserId , password) => {
+    const payload = verifyJwt(jwtUserId);
+    if(!payload) return "userNotFound";
+    const userId = payload.id;
+    const user = await prisma.user.findUnique({
+        where:{
+            id: userId,
+        }
+    });
+    if(!user) return "userNotFound";
+    const result = await prisma.user.update({
+        where: {
+            id: userId,
+        },
+        data: {
+            password: await bcript.hash(password,10)
+        }
+    });
+    if(result) return "success";
+     else throw new Error("some thing wrong")
+}
