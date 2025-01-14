@@ -9,7 +9,7 @@ const SigninButton = () => {
         <>
         {section && section.user ? 
         <>
-        {section.user.firstName + " " + section.user.lastName}
+        <Link href="/profile">{section.user.firstName + " " + section.user.lastName}</Link>
         <Link href={"/api/auth/signout"}>signout</Link>
         </>
         :
